@@ -1,0 +1,170 @@
+	    /*Assignment 11*/
+		/*Input*/
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct student
+ {
+  struct student *prev;
+  int roll;
+  char name[20];
+  int marks;
+  struct student *next;
+ }student;
+ 
+student* insert(student *head,student *node)
+ {
+  student *temp1,*temp=head;
+  if(head==NULL)
+    head=node;
+  else
+    {
+     while(temp!=NULL && temp->roll < node->roll)
+      {
+       temp1=temp;
+       temp=temp->next;
+      }
+     if(temp==head)
+      {
+       node->next=head;
+       head->prev=node;
+       head=node;
+      }
+     else
+      {
+       temp1->next=node;
+       node->prev=temp1;
+       if(temp!=NULL)
+        {
+         node->next=temp;
+         temp->prev=node;
+        }
+       }
+      }//else main
+    return head;
+  }//function
+
+void display(student *head)
+ {
+  student *temp;
+  temp=head;
+  while(temp!=NULL)
+   {
+    printf("\n %d \t %s \t %d",temp->roll,temp->name,temp->marks);
+    temp=temp->next;
+   }
+  }
+void reverse(student *head)
+ {
+  student *temp=head;
+  while(temp->next!=NULL)
+   temp=temp->next;
+  while(temp!=NULL)
+   {
+    printf("\n %d \t %s \t %d",temp->roll,temp->name,temp->marks);
+    temp=temp->prev;
+   }
+  }//function
+
+student* delete(student *head,int R)
+ {
+  student *temp=head;
+  while(temp!=NULL && temp->roll != R)
+      temp=temp->next;
+  if(temp!=NULL)
+   {
+    if(temp==head) //first node
+     {
+      head=head->next;
+      head->prev=NULL;
+     }
+    else
+     {
+      if(temp->next==NULL) //last node
+        temp->prev->next=NULL;
+      else
+       {
+        temp->prev->next=temp->next;
+        temp->next->prev=temp->prev;
+       }
+      free(temp);
+      }
+     }//if
+    else
+     {
+      printf("Record is not present");
+     }
+    return head;
+   }//function
+void main()
+ {
+  int i,ch,R;
+  char ans;
+  student *a,*head;
+  head=NULL;
+  do
+  {
+   printf("\n 1.Create \n 2.Display \n 3.Reverse Display \n 4.Delete Node \n 5.Add Node \n 6.Modify Data");
+   printf("\n Enter Your Choice: ");
+   scanf("%d",&ch); 
+  switch(ch)
+  {
+  case 1:
+       do
+        {
+    	 a=(student*)malloc(sizeof(student));
+    	 a->next=a->prev=NULL;
+    	 printf("Roll: ");
+    	 scanf("%d",&a->roll);
+    	 printf("Name: ");
+    	 scanf("%s",&a->name);
+    	 printf("Marks: ");
+    	 scanf("%d",&a->marks);
+    	 head=insert(head,a);
+    	 printf("Do you want to add more(Y/N) ");
+    	 scanf(" %c",&ans);
+   	}while(ans == 'y' || ans == 'Y');
+   	break;
+  case 2:
+  	display(head);
+  	break;
+  case 3:
+  	reverse(a);
+ 	break;
+  case 4:
+        printf("Enter RollNo Whose data do you want to delete ");
+        scanf("%d",&R);
+ 	head=delete(head,R);
+ 	break;
+  case 5:
+  	 a=(student*)malloc(sizeof(student));
+    	 a->next=a->prev=NULL;
+    	 printf("Roll ");
+    	 scanf("%d",&a->roll);
+    	 printf("Name ");
+    	 scanf("%s",&a->name);
+    	 printf("Marks: ");
+    	 scanf("%d",&a->marks);
+    	 head=insert(head,a);
+    	 break;
+  case 6:
+  	a=(student*)malloc(sizeof(student));
+    	a->next=a->prev=NULL;
+ 	printf("Enter RollNo Whose data do you want to modify ");
+        scanf("%d",&R);
+ 	head=delete(head,R);
+ 	printf("Enter New Roll No: ");
+ 	scanf("%d",&a->roll);
+ 	printf("Enter New name: ");
+ 	scanf("%s",&a->name);
+ 	printf("Marks: ");
+    	scanf("%d",&a->marks);
+ 	head=insert(head,a);
+ 	break;
+  }//switch
+  printf("\n Do You want to Continue..........Y/N ");
+  scanf(" %c",&ans);
+ }while(ans == 'y' || ans == 'Y');
+ }//main
+
+		

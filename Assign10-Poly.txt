@@ -1,0 +1,215 @@
+	    /*Assignment 10*/
+		/*Input*/		
+
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct Poly
+{
+ int coef,pow;
+ struct Poly *next;
+}Poly;
+
+Poly* Insert(Poly *head,Poly *node)
+{
+ Poly *temp=NULL;
+ Poly *prev=NULL;
+ if(node->coef!=0)
+  {
+   if(head==NULL)
+    {
+     head=temp=node;
+     head->next=head;
+    }//if 2
+   else
+    {
+     if(node->pow>head->pow)
+      {
+       temp=head;
+        while(temp->next!=head)
+         {
+          temp=temp->next;
+         }//while
+        node->next=head;
+        head=node;
+        temp->next=head;
+       }//if 3
+     else
+      {
+       temp=head;
+       do
+        {
+         if(temp->pow<=node->pow)
+           break;
+         prev=temp;
+         temp=temp->next;
+        }while(temp!=head);
+       if(temp->pow==node->pow)
+        {
+         temp->coef+=node->coef;
+         free(node);
+        }//if 5
+       else 
+        {
+         prev->next=node;
+         node->next=temp;
+        }//else 5
+      }//else 3   
+    }//else 2
+   }//if 1
+  else
+   {
+   printf("Invalid Polynomial");
+   }//else 1
+ return head;
+}//Insert
+
+Poly* create()
+{
+ char ans;
+ Poly *node;
+ Poly *head=NULL;
+ do
+ {
+  node=(struct Poly*)malloc(sizeof(struct Poly));
+  node->next=NULL;
+  printf("Enter  Coef");
+  scanf("%d",&node->coef);
+  printf("Enter Power");
+  scanf("%d",&node->pow);
+  head=Insert(head,node);
+  printf("Do you want to continue to add node.... Y/N :");
+  scanf(" %c",&ans);
+ }while(ans == 'y' || ans == 'Y');
+ return head;
+}//create
+
+void display(Poly *head)
+{
+ Poly *temp=head;
+ printf("\n %d X^%d",temp->coef,temp->pow);
+ temp=temp->next;
+ while(temp!=head)
+ {
+  if(temp->coef<0)
+    printf("%d X^%d",temp->coef,temp->pow);
+  else
+    printf("+ %d X^%d",temp->coef,temp->pow);
+  temp=temp->next;
+ }
+ printf(" = 0");
+}//display
+
+Poly* addition(Poly *Poly1,Poly *Poly2)
+{
+ Poly *Poly3=NULL;
+ Poly *t1=Poly1;
+ Poly *t2=Poly2;
+ Poly *node;
+ do
+  {
+   node=(struct Poly*)malloc(sizeof(struct Poly));
+   node->next=NULL;
+   node->pow=t1->pow;
+   node->coef=t1->coef;
+   t1=t1->next;
+   Poly3=Insert(Poly3,node);
+  }while(t1!=Poly1);
+  
+ do
+  {
+   node=(struct Poly*)malloc(sizeof(struct Poly));
+   node->next=NULL;
+   node->pow=t2->pow;
+   node->coef=t2->coef;
+   t2=t2->next;
+   Poly3=Insert(Poly3,node);
+  }while(t2!=Poly2);
+ return Poly3;
+}//Addition
+	 
+Poly* multiplication(Poly *Poly1,Poly *Poly2)
+ {
+  Poly *Poly3=NULL;
+  Poly *node;
+  Poly *t1=Poly1;
+  Poly *t2=Poly2;
+  do
+   {
+    do
+     {
+      node=(struct Poly*)malloc(sizeof(struct Poly));
+      node->next=NULL;
+      node->coef=t1->coef*t2->coef;
+      node->pow=t1->pow+t2->pow;
+      Poly3=Insert(Poly3,node);
+      t2=t2->next;
+     }while(t2!=Poly2);
+    t1=t1->next;
+   }while(t1!=Poly1);
+   return Poly3;
+ }//multiplication
+ 
+float evalution(Poly *head,int x)
+ {
+  Poly *temp=head;
+  float sum=0;
+  int p,t,i;
+  do
+  {
+   if(temp->pow<0)
+     p=-(temp->pow);
+   else
+     p=temp->pow;
+   t=1;
+   for(i=1;i<=p;i++)
+     t*=x;
+   if(temp->pow<0)
+     sum +=temp->coef*(1/t);
+   else
+     sum +=temp->coef*t;
+   temp=temp->next;
+  }while(temp!=head);
+ return sum;
+}
+int main()
+{
+ char ans;
+ int choi,x;
+ Poly *Poly1,*Poly2,*Poly3,*Poly4;
+ Poly1=create();
+ Poly2=create();
+ do
+ {
+  printf("\n 1.Display \n 2.Addition \n 3.Multiplication \n 4.Evalution \n Enter Your Choice ");
+  scanf("%d",&choi);
+  switch(choi)
+  {
+   case 1:
+        display(Poly1);
+   	display(Poly2);
+   	break;
+   case 2:
+   	Poly3=addition(Poly1,Poly2);
+   	display(Poly3);
+   	break;
+   case 3:
+        Poly4=multiplication(Poly1,Poly2);
+        display(Poly4);
+        break;
+   case 4:
+   	printf("Enter value of X= ");
+  	scanf("%d",&x);
+   	printf("P(%d) = %f ",x,evalution(Poly1,x));
+   default:
+   	printf("Wrong Choice");
+   	break;
+  }//switch
+  printf("\n Do you want to continue.....y/n ");
+  scanf(" %c",&ans);
+ }while(ans == 'Y' || ans == 'y');
+}//main
+
+		
+
+
+ 

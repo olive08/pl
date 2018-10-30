@@ -1,0 +1,68 @@
+    /*Assignment 7(Quick-Recursive)*/
+		/*Input*/
+
+#include<stdio.h>
+
+/*************** Recursive ****************************/
+int partition(int numbers[],int left,int right)
+{
+  int pivot,Temp,pivotP=left;
+
+  pivot = numbers[left++];
+  printf("\nPivot (%3d)=> ",pivot);
+  while (left <= right)
+  {
+    while ((numbers[right] >= pivot) && (left <= right))
+      right--;
+    while ((numbers[left] < pivot) && (left <= right))
+      left++;
+    if(left<right)
+    {
+      Temp=numbers[right];
+      numbers[right] = numbers[left];
+      numbers[left]=Temp;
+      left++;right--;
+    }
+  }
+      if(pivotP!=right)
+      {
+      Temp=numbers[right];
+      numbers[right] = numbers[pivotP];
+      numbers[pivotP]=Temp;
+      }
+  pivot = right;
+return pivot;
+}
+
+void quicksort(int numbers[], int left, int right)
+{
+
+  int i,pivot;
+  static int Pass=1;
+  pivot=partition(numbers,left,right);
+  printf(" Pass %2d: ",Pass++);
+   for(i=0;i<10;i++)
+    printf("%3d ",numbers[i]);
+  if (left < pivot)
+    quicksort(numbers, left, pivot-1);
+  if (right > pivot)
+    quicksort(numbers, pivot+1, right);
+}
+
+void main()
+{
+int i,n,a[10];
+printf("\n enter the total no. of elements");
+scanf("%d",&n);
+printf("\n enter the data");
+for(i=0;i<n;i++)
+ {
+  scanf("%d",&a[i]);
+ }
+quicksort(a,0,n-1);
+printf("\nQuick Sort: ");
+for(i=0;i<n;i++)
+  printf("%3d ",a[i]);
+}
+
+		

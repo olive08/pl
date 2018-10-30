@@ -1,0 +1,181 @@
+	      /*Assignment 9*/
+		 /*Input*/
+#include<stdio.h>
+#include<malloc.h>
+
+typedef struct link
+{
+	int num;
+	struct link *next;
+}link;
+
+link* insert(link *head)
+{
+	link *temp,*node,*prev;
+	node=(link*)malloc(sizeof(link));
+	node->next=NULL;
+	printf("\nEnter the value in the node\n");
+	scanf("%d",&node->num);
+	if(head==NULL)
+	{
+		head=node;
+	}
+	else
+	{
+          temp=head;
+          while(temp!=NULL && temp->num<node->num)
+        	{
+			prev=temp;
+			temp=temp->next;
+		}//while
+		if(temp==head)
+		{
+			node->next=head;
+			head=node;
+		}//if
+		else
+		{
+			if(temp!=NULL)
+			node->next=temp;
+			prev->next=node;
+		}//else
+		
+			
+	}//else
+	return head;
+}//insert
+
+void display(link *head)
+{
+	link *temp;
+	temp=head;
+		
+	while(temp!=NULL)
+	{
+		printf("%d",temp->num);
+		if(temp->next!=NULL)
+		printf("--->");
+		temp=temp->next;
+	}
+}//display
+	
+void Rdisplay(link *temp, int flag)
+{
+        
+        if(temp!=NULL)
+        {	
+                Rdisplay(temp->next,0);
+                printf("%d",temp->num);
+                if(flag==0)
+                printf("<--");
+	              
+        }//if
+}//Rdisplay
+
+link* Reverse(link *head)
+{
+	link *P1, *P2, *P3;
+	P1=head;
+	P2=P1->next;
+	P3=P2->next;
+	
+	P1->next=NULL;
+	while(P3!=NULL)
+	{
+		P2->next=P1;
+		P1=P2;
+		P2=P3;
+		P3=P3->next;
+	}//while
+	P2->next=P1;
+	head=P2;
+	return head;
+}//reverse
+
+link* del(link *head, int key)
+{
+	link *temp=head, *prev;
+	
+	while(temp!=NULL && key!=temp->num)
+	{
+		prev=temp;
+		temp=temp->next;
+	}//while	
+		
+	if(temp==NULL || temp->num!=key)
+		printf("***The node is absent!!!***");
+		
+	else if(temp==head)
+		head=head->next;
+		
+	else if(temp->next==NULL)
+		prev->next=NULL;
+	
+	else
+		prev->next=temp->next;
+		
+	free(temp);
+	return head;
+}//delete
+	
+int main()
+{
+	link *head=NULL;
+	int key,ch,flag=1;
+	char ans,ANS;
+	printf("\nEnter the list you want to create :\n");
+	do
+	{
+		head=insert(head);
+		display(head);
+		printf("\nAdd more (Y/N)");
+		scanf("%c",&ans);
+		scanf("%c",&ans);
+	}while(ans=='Y'||ans=='y');
+	do
+	{
+	printf("\nEnter the operation you want to perform:");
+	printf("\n1. Display");
+	printf("\n2. Insert a node");
+	printf("\n3. Delete a node");
+	printf("\n4. Display Reverse");
+	printf("\n5. Revert the list\t");
+	scanf("%d",&ch);
+	switch(ch)
+	{
+	case 1:
+		printf("\nThe list you entered is:\n");
+		display(head);
+		break;
+
+		case 2:
+			head=insert(head);
+			printf("\nThe updated list is:\n");
+			display(head);
+			break;
+
+		case 3:
+			printf("\nEnter the node value you want to delete:\t");
+			scanf("%d",&key);
+			head=del(head,key);
+			printf("\nThe updated list is:\n");
+			display(head);
+			break;
+		case 4:
+			printf("\nThe reversely displayed list is:\n");
+			Rdisplay(head,1);
+			break;
+		case 5:
+			printf("\nThe reverted list is:\n");
+			head=Reverse(head);
+			display(head);
+			break;
+		default:
+			printf("Invalid Input!!!");
+		}//switch
+		printf("\nDo more (Y/N)???");
+		scanf(" %c",&ANS);
+	}while(ANS=='Y'||ANS=='y');
+}//main	
+
+

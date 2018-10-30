@@ -1,0 +1,185 @@
+
+                           	            /*Set Operations*/
+		   				/* Input*/
+
+#include<stdio.h>
+void accept(int A[10],int n)
+{ 
+  int i,j;
+      for(i=0;i<n;)
+      {
+	scanf("%d",&A[i]);                          //accepting set elements...     
+	for(j=0;j<i;j++) 
+	  if(A[j]==A[i])                            //Element repeated...
+	  {
+	     printf("\nElement is repeated....So Re-entered the new element\t");
+	     break; 
+	  }//if
+	  if(j==i)                                  //Element not repeated... 
+	   i++;
+      }//outer for
+}//accept
+
+
+
+void display(int A[10],int n)
+{   
+  int i;
+    printf("\n{");
+    for(i=0;i<n;i++)
+     {
+       if(i<n-1)
+        printf("%d,",A[i]);
+       if(i==n-1)
+        printf("%d",A[i]);
+     }//for
+	printf("}");
+}//display
+
+
+
+int unionof(int A[10],int B[10],int C[10],int n, int m)
+{
+  int i,j,k=0;
+  for(i=0;i<n;i++)
+{    
+	C[k]=A[i];                     //copy first set to resultant set...
+        k++;
+}
+     for(j=0;j<m;j++)                  
+     {
+       for(i=0;i<n;i++)
+        {
+          if(B[j]==A[i])               //Elements in first set is same as the second...
+           break;
+        }//inner for
+         if(i==n)                      //No same elements...
+         {
+          C[k]=B[j];                   //copy second set element to resultant set...
+	  k++;
+         }//if
+     }//outer for
+     return k;
+}//union
+
+
+int intersection(int A[10],int B[10],int C[10],int n,int m)
+{ 
+    int i,j,k=0;
+     for(i=0;i<n;i++)
+      {
+        for(j=0;j<m;j++)
+        {
+         if(A[i]==B[j])                    //Same element is present in both sets... 
+          {
+           C[k]=A[i];                      //copy that element to resultant set...
+           k++;
+           break;
+          }//if
+        }//inner for
+      }//outer for
+     return k;
+}//intersection
+
+
+int difference(int A[10],int B[10],int C[10],int n,int m)
+{
+  int i,j,k=0;
+    for(i=0;i<n;i++)
+    {
+      for(j=0;j<m;j++)
+       {
+         if(A[i]==B[j])                   //same element present...
+          break;
+       }//inner for
+         if(j==m)                         //present in first set but not in second set...
+          {
+            C[k]=A[i];                    //copy that element to resultant set...
+            k++;
+          }//if
+    }//outer for
+     return k;
+}//difference
+
+
+int main()
+{
+  int a[10],n,b[10],m,choice,c[10],c1[10],c2[10],ans,l,k,p;
+    printf("\nEnter size of set A\t");
+    scanf("%d",&n);
+    printf("\nEnter Elements of set A\t");
+    accept(a,n);
+    display(a,n);
+
+      printf("\nEnter size of set B\t");
+      scanf("%d",&m);
+      printf("\nEnter Elements of set B\t");
+      accept(b,m);
+      display(b,m);
+      
+   do
+   {
+     printf("\nEnter your choice\t");
+     printf("\n1:Union\n2:Intersection\n3:Difference\n4:Symmetric Difference\t");
+     scanf("%d",&choice);
+       switch(choice)
+       {
+        case 1:
+              //accept(a,n);
+              //accept(b,m);
+		printf("\nSet A:");
+              display(a,n);
+              printf("\nSet B:");
+              display(b,m);
+              printf("\n(A Union B):\t");
+              
+              k=unionof(a,b,c,n,m);
+              display(c,k);
+              break;
+
+        case 2:
+              /*accept(a,n);
+              accept(b,m);*/
+              k=intersection(a,b,c,n,m);
+              printf("\nSet A:");
+              display(a,n);
+              printf("\nSet B:");
+              display(b,m);
+              printf("\n(A Intersection B:\t");
+              display(c,k);
+              break;
+
+         case 3:
+              /* accept(a,n);
+               accept(b,m);*/
+               k=difference(a,b,c,n,m);
+               printf("\nSet A:");
+               display(a,n);
+               printf("\nSet B:");
+               display(b,m);
+               printf("\n(A-B):");
+               display(c,k);
+               break;
+
+         case 4:
+               /*accept(a,n);
+               accept(b,m);*/
+               k=difference(a,b,c1,n,m);
+               l=difference(b,a,c2,m,n);
+               p=unionof(c1,c2,c,k,l);
+               printf("\nSet A:");
+               display(a,n);
+               printf("\nSet b:");
+               display(b,m);
+               printf("\n((A-B)U(B-A)):");
+               display(c,p);
+               break;
+         
+          default:
+                 printf("\nInvalid Input.....");    
+       }//switch
+ 
+       printf("\nDo you want to continue.....(1)");
+       scanf("%d",&ans);
+    }while(ans==1);   
+}//main

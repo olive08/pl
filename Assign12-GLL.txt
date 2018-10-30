@@ -1,0 +1,98 @@
+
+	  /*Assignment 12*/
+              /*Input*/
+
+#include<stdio.h>
+#include<stdlib.h>
+
+enum field {atom,down};
+enum boolean {FALSE,TRUE};
+typedef struct GLL
+{
+   int flag;
+   struct tag
+   {
+     char atom;
+     struct GLL *down;
+   }tag; //structure
+   struct GLL *next;
+}GLL;  //structure
+
+
+GLL *create(char str[])
+{
+   static int i=0;
+   GLL *node=NULL;
+     if(str[i]=='\0')
+       return NULL;
+      for(;str[i]==',' || str[i]==' ';i++);
+        node =(GLL*)malloc(sizeof(GLL));
+      node->tag.down=node->next=NULL;
+      if(str[i]=='(')
+      {
+        node->flag=down;
+        i++;
+        node->tag.down=create(str);
+         if(str[i]!='\0')
+           node->next=create(str);
+         else 
+           i=0;  
+      }//if
+      else
+         if(isalpha(str[i]))
+          {
+            node->flag=atom;
+            node->tag.atom=str[i++];
+            node->next=create(str);
+          }//if
+          else
+             if(str[i]==')')
+             {
+                 i++;
+                 free(node);
+                 return NULL;
+             }//if
+     return node;        
+}//create
+
+
+void display(GLL *head)
+{
+    if(head==NULL);
+    else
+      {
+        if(head->flag==1)
+        {
+          printf(" (");
+          display(head->tag.down);
+          printf(" )");
+            if(head->next!=NULL)
+            {
+              printf(",");
+              display(head->next);
+            }//if  
+        }//if
+        else
+          {
+             printf(" %c",head->tag.atom);
+              if(head->next!=NULL)
+                printf(",");
+              display(head->next);  
+          }//else
+      }//else
+}//display
+
+
+void main()
+{
+  int i;
+  GLL *g,*k;
+  char p[40];  
+  printf("\n Enter List & SubList... Do element seperate by ',' and write sublist in '()'");
+  printf("\n i.e. ((a,(a,(b,c)),d),(b,c,d))\n ");
+  scanf("%s",p);  
+  k=create(p);
+  display(k);
+  printf("\n");
+}//main
+

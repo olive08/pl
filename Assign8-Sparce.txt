@@ -1,0 +1,186 @@
+		/*Assignament-8*/
+		   /*Input*/
+
+#include<stdio.h>
+typedef struct Sparce
+{
+ int row,col,val;
+}Sparce;
+void Accept(int a[][6],int r,int c)
+
+{
+int i,j;
+	for(i=0;i<r;i++)
+	    for(j=0;j<c;j++)
+		scanf("%d",&a[i][j]);
+}//accept
+void sparce_matrix(int a[][6],Sparce s1[10],int r,int c)
+{
+ int i,j,k=0;
+ 
+   for(i=0;i<r;i++)
+      for(j=0;j<c;j++)
+	 if(a[i][j]!=0)
+	  {
+	    s1[++k].row=i;
+	    s1[k].col=j;
+	    s1[k].val=a[i][j];
+	  }
+ s1[0].row=r;
+ s1[0].col=c;
+ s1[0].val=k;
+}//sparce_mat
+
+void sparce_put(Sparce s1[10])
+{
+  int i;
+  printf("\n Row \t Column \t value");
+  for(i=0;i<=s1[0].val;i++)
+     printf("\n %d \t %d \t %d ",s1[i].row,s1[i].col,s1[i].val);
+}//sparce_put
+
+void simple_transpose(Sparce s1[10],Sparce s2[10])
+{
+  int k,i,j;
+  s2[0].row=s1[0].col;
+  s2[0].col=s1[0].row;
+  s2[0].val=s1[0].val;
+  k=1;
+  for(i=0;i<s1[0].col;i++)
+   for(j=1;j<=s1[0].val;j++)
+     if(i==s1[j].col)
+       {
+	s2[k].row=s1[j].col;
+	s2[k].col=s1[j].row;
+	s2[k].val=s1[j].val;
+	k++;
+       }//if
+}//trans
+
+void fast_transpose(Sparce s1[10],Sparce s3[10])
+{
+  int pos[6],term[6];
+  int i,j;
+  for(i=0;i<6;i++)
+    pos[i]=term[i]=0;
+  for(i=1;i<=s1[0].val;i++)
+     term[s1[i].col]++;
+   pos[0]=1;
+  for(i=1;i<=s1[0].col;i++)
+     pos[i]=pos[i-1]+term[i-1];
+  for(i=1;i<=s1[0].val;i++)
+    {
+	j=pos[s1[i].col]++;
+	s3[j].row=s1[i].col;
+	s3[j].col=s1[i].row;
+	s3[j].val=s1[i].val;
+    }//i
+ s3[0].row=s1[0].col;
+ s3[0].col=s1[0].row;
+ s3[0].val=s1[0].val;
+}//Fast_trans
+
+void sparce_sum(Sparce s1[10],Sparce s2[10],Sparce s3[10])
+{
+  int i,j,k,z;
+  k=1;
+  for(i=1,j=1;(i<=s1[0].val)&&(j<=s2[0].val);)
+     {     
+	if(s1[i].row==s2[j].row)
+	{
+ 	  if(s1[i].col==s2[j].col)
+	    {   
+		z=s1[i].val+s2[j].val;
+		if(z!=0)
+		{
+		s3[k].val=z;
+		s3[k].row=s1[i].row;
+		s3[k].col=s1[i].col;
+                i++;j++;k++;
+		}
+	    }//if
+	else if(s1[i].col>s2[j].col)
+	   {
+		s3[k]=s2[j];
+		j++;k++;
+	   }
+	else
+	    s3[k++]=s1[i++];
+	 }//main if
+	//If row dosen't match then 
+         else if(s1[i].row>s2[j].row)
+	    s3[k++]=s2[j++];
+	 else 
+	    s3[k++]=s1[i++];
+      }//for
+
+    while(j<=s2[0].val)
+    {
+    s3[k]=s2[j++];
+    }//while
+  
+    while(i<=s1[0].val)
+    {
+    s3[k++]=s1[i++];
+    }//while
+ 
+ s3[0].row=s1[0].row;
+ s3[0].col=s1[0].col;
+ s3[0].val=--k;
+
+}//function
+void main()
+{
+ Sparce s1[10],s2[10],s3[10],s4[10],s5[10];
+ int a1[6][6],a2[6][6];
+ int r1,r2,c1,c2,cho;
+ char ans;
+ 
+ printf("\n Enter Number of the Row ");
+ scanf("%d",&r1);
+ printf("\n Enter Number of the Column ");
+ scanf("%d",&c1);
+ Accept(a1,r1,c1);
+ sparce_matrix(a1,s1,r1,c1);
+ 
+ printf("\n Enter Number of the Row ");
+ scanf("%d",&r2);
+ printf("\n Enter Number of the Column ");
+ scanf("%d",&c2);
+ Accept(a2,r2,c2);
+ sparce_matrix(a2,s2,r2,c2);
+ 
+ sparce_put(s1);
+ sparce_put(s2);
+ do
+ {
+  printf("\n 1.Fast transpose \n 2.Simple Transpose \n 3.Sparce Sum \n Enter your choice ");
+  scanf("%d",&cho);
+  switch(cho)
+  {
+  case 1:
+	fast_transpose(s1,s3);
+	sparce_put(s3);
+	break;
+  case 2:
+	simple_transpose(s1,s4);
+	sparce_put(s4);
+	break; 
+  case 3: 
+	sparce_sum(s1,s2,s5);
+	sparce_put(s5);
+	break;
+  default:
+	printf("Wrong choice");
+	break;
+  }//switch
+ printf("\n Enter your choice.....Y/N ");
+ scanf(" %c",&ans);
+ }//do
+ while(ans == 'y' || ans == 'Y');
+}//main		
+
+		
+
+
+ 

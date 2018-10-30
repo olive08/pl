@@ -1,0 +1,157 @@
+						/* Matrix Operations*/           
+ 						     /* Input*/
+
+#include<stdio.h>
+
+void Accept(int a[][4],int r,int c)
+{
+int i,j;
+	for(i=0;i<r;i++)
+	    for(j=0;j<c;j++)
+		scanf("%d",&a[i][j]);
+}//accept
+void Display(int a[][4],int r,int c)
+{
+int i,j;
+	for(i=0;i<r;i++)
+	{	printf("\n");
+            for(j=0;j<c;j++)
+		printf("\t%d",a[i][j]);
+	}//i
+}//display
+void Addition(int a[][4],int b[][4],int c[][4],int r1,int c1)
+{
+int i,j;
+     for(i=0;i<r1;i++)
+	{
+	for(j=0;j<c1;j++)
+	   {
+        	c[i][j]=a[i][j]+b[i][j];
+	   }//j
+	}//i
+//Display(c,r1,c1);
+}//addition
+void Mul(int a[][4],int b[][4],int c[][4],int r1,int c1,int c2)
+{
+int i,j,k;
+for(i=0;i<r1;i++)
+   { 
+   for(j=0;j<c2;j++)
+       {	
+		c[i][j]=0;
+	for(k=0;k<c1;k++)
+	   {
+	    c[i][j]+=a[i][k]*b[k][j];
+	   }//k
+       }//j
+   }//i
+
+}//mul
+
+
+
+void Trans(int a[][4],int b[][4],int r,int c)
+{
+    //int b[4][4];
+    int i,j;
+	for(i=0;i<r;i++)
+	   for(j=0;j<c;j++)
+		b[j][i]=a[i][j];
+    //Display(b,r,c);  
+}//Trans  
+void Saddle(int a[][4],int r1,int c1)
+{
+int i,j,max1,min1,max[4],min[4];
+   for(i=0;i<r1;i++)
+   {
+     max[i]=a[i][0];     
+	for(j=0;j<c1;j++)
+	{
+	if(max[i]<a[i][j])
+	max[i]=a[i][j];
+	}//j
+    }//i
+	min1=max[0];
+    for(i=0;i<r1;i++)
+        {	
+	if(min1>max[i])
+	min1=max[i];
+        }//i
+   for(i=0;i<c1;i++)
+   {
+     min[i]=a[0][i];     
+	for(j=0;j<r1;j++)
+	{
+	if(min[i]>a[j][i])
+	min[i]=a[j][i];
+	}//j
+   }//i
+	max1=min[0];
+   for(i=0;i<c1;i++)	
+	{
+	if(max1<min[i])
+	max1=min[i];
+	}//i
+if(max1=min1)
+printf("\n Saddle Point is: %d",max1);
+else
+printf("\n Saddle Point is not found");
+}//Saddle
+void main()
+{
+int A[4][4],B[4][4],C[4][4],D[4][4];
+int cho,r1,c1,r2,c2;
+char ans;
+printf("Enter the rows of the matrix:");
+scanf("%d",&r1);
+printf("Enter The column of the matrix:");
+scanf("%d",&c1);
+Accept(A,r1,c1);
+printf("Enter the rows of the matrix:");
+scanf("%d",&r2);
+printf("Enter The column of the matrix:");
+scanf("%d",&c2);
+Accept(B,r2,c2);
+do
+{
+printf("\n 1:Addition \n 2:Multiplication \n 3:Transpose \n 4:Saddle Point");
+printf("\n Enter Your Choice");
+scanf("%d",&cho);
+switch(cho)
+{
+case 1:
+	if((r1==r2) && (c1==c2))
+	{	
+	Addition(A,B,C,r1,c1);
+	Display(C,r1,c1);
+	}	
+	else
+	printf("Can't do Addition");
+	break;
+case 2:
+	if(r2==c1)
+	{
+	Mul(A,B,C,r1,r2,c2);
+	Display(C,r1,c2);
+	}
+	else
+	printf("Sorry");
+	break;
+case 3:
+	//if(r1==c1)
+	Trans(A,D,r1,c1);
+	Display(D,c1,r1);
+	//else
+	//printf("Sorry");
+	break;
+case 4:
+	Saddle(A,r1,c1);
+	break;
+default:
+	printf("Wrong Choice");
+}//switch
+printf("\n Do you want to continue Y/N: ");
+scanf(" %c",&ans);
+}//while
+while(ans=='y' || ans=='Y');
+}//main			

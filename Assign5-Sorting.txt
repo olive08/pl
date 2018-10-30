@@ -1,0 +1,164 @@
+	    /*Assignment 5*/
+ 		/*Input*/
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+
+void input(char str[10][10],int n)
+{
+	int i;
+	printf("\nEnter the data:\n");
+	for(i=0;i<n;i++)
+	{
+	scanf("%s",str[i]);
+	}
+}//input
+
+
+void Display(char str[10][10],int n)
+{
+	int i;
+	printf("\nSorted data is:\n");	
+	for(i=0;i<n;i++)
+	{
+	printf("%s\n",str[i]);
+	}
+
+}//display
+
+
+void Bubble_sort(char str[10][10],int n)
+{
+	int i,j,k;
+	char temp[30];
+	temp[30]=0;
+	for(i=0;i<(n-1);i++)
+	{
+		for(j=0;j<n-(i+1);j++)
+		{
+			if(strcmp(str[j],str[j+1])>0)   //for swapping
+			{
+					strcpy(temp,str[j]);
+					strcpy(str[j],str[j+1]);
+					strcpy(str[j+1],temp);
+			}
+		}
+			printf("\n Pass %d:",i+1);
+	
+			for (k = 0; k < n; k++)
+			printf("%s\t", str[k]);
+	
+	}
+
+
+}//bubble-sort
+
+
+void Selection_sort(char str[10][10],int n)
+{
+	int i,j,k,x;
+	char temp[10];
+	for(i=0;i<n;i++)
+	{
+		k=i;
+		for(j=i+1;j<n;j++)
+		{
+			x=strcmp(str[j],str[k]);
+			{
+			  if(x< 0)
+			  k=j;
+			}
+		}
+	
+
+	if(k!=i)
+	{
+	strcpy(temp,str[i]);
+	strcpy(str[i],str[k]);
+	strcpy(str[k],temp);
+	}
+	printf("\n Pass %d:",i+1);
+	
+			for (k = 0; k < n; k++)
+			printf("%s\t", str[k]);
+	
+	
+	
+ 	}	
+}//selection-sort
+
+
+int Binary_search(char str[10][10],char key[20],int n)    
+{
+	int mid,l,h;
+	l=0;
+	h=n-1;
+	mid=(l+h)/2;
+	while(l<=h)   //iterative
+	{
+	if(strcmp(str[mid],key)==0)
+	return mid;
+	if(strcmp(str[mid],key)>0)     //for left half
+	{
+	h=mid-1;
+	}
+	else
+	l=mid+1;     //for right half
+	mid=(l+h)/2;
+	}
+	return -1;
+	
+}//binary-search
+
+
+int main()
+{
+	int n,i,ch,l,h,b,mid;
+	char key[20];
+	char str[10][10];
+	printf("\nHow many strings want to enter:\n");
+	scanf("%d",&n);
+	input(str,n);
+	
+	do
+	{
+	//printf("\n________________________________________________________________\n");
+	printf("\nMENU\n1)Selection Sort\n2)Bubble sort\n3)Binary Search\n4)Exit\n");
+	//printf("\n________________________________________________________________\n");
+	printf("\nEnter your choice:");
+	scanf("%d",&ch);
+	
+	switch(ch)
+	{
+		case 1:
+			Selection_sort(str,n);
+			Display(str,n);
+			break;
+			
+		case 2:
+			Bubble_sort(str,n);
+			Display(str,n);
+			break;
+			
+		case 3:	
+			Selection_sort(str,n);
+			printf("\nEnter the key you want to searched:");
+			scanf("%s",key);
+			b=Binary_search(str,key,n);
+			if(b==-1)
+			printf("\nElement not found...");
+			else
+			printf("\nElement found at %d position",b);
+			break;
+			
+		case 4:
+			exit(0);
+			
+			
+		default:printf("\nYou have entered wrong choice....");
+	}
+	}while(ch<5);
+return 0;
+}//main
+
+	
